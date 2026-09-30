@@ -6,6 +6,15 @@ Web backend for AcademiaSD Krea-2 Trainer
 
 import json
 import os
+
+# =============================================================================
+# GPU SELECTION
+# =============================================================================
+# Physical NVIDIA GPU index as shown by nvidia-smi. Can be overridden before
+# starting the server with KREA2_GPU_ID (for example: set KREA2_GPU_ID=1).
+GPU_ID = os.environ.get("KREA2_GPU_ID", "2").strip() or "2"
+os.environ["CUDA_VISIBLE_DEVICES"] = GPU_ID
+
 import subprocess
 import sys
 import threading
@@ -292,7 +301,7 @@ def get_system_stats():
 
     try:
         creation_flag = subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0
-        cmd = ["nvidia-smi", "--query-gpu=memory.total,memory.used,name,temperature.gpu", "--format=csv,nounits,noheader"]
+        cmd = ["nvidia-smi", "-i", GPU_ID, "--query-gpu=memory.total,memory.used,name,temperature.gpu", "--format=csv,nounits,noheader"]
         output = subprocess.check_output(cmd, text=True, errors="ignore", creationflags=creation_flag).strip().splitlines()[0]
         parts = [p.strip() for p in output.split(",")]
         total_m = float(parts[0])
@@ -306,6 +315,8 @@ def get_system_stats():
         try:
             import torch
             if torch.cuda.is_available():
+                # CUDA_VISIBLE_DEVICES exposes the selected physical GPU as cuda:0.
+                torch.cuda.set_device(0)
                 vram_info["gpu_name"] = torch.cuda.get_device_name(0)
                 free_b, total_b = torch.cuda.mem_get_info(0)
                 used_b = total_b - free_b
@@ -997,6 +1008,7 @@ if __name__ == "__main__":
     print("=" * 70)
     print(f"  Base Dir / Carpeta  : {BASE_DIR}")
     print(f"  Python Interpreter  : {sys.executable}")
+    print(f"  Physical GPU        : {GPU_ID} (visible to CUDA/PyTorch as cuda:0)")
     print(f"  URL                 : http://127.0.0.1:5000")
     print("=" * 70 + "\n")
 
