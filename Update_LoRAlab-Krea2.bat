@@ -1,7 +1,7 @@
 @echo off
 setlocal EnableExtensions EnableDelayedExpansion
 
-title AcademiaSD - Krea-2 LoRA Trainer Updater
+title AcademiaSD - Krea-2 LoRA Trainer Updater (SchorschRoch Fork)
 color 0B
 
 cd /d "%~dp0"
@@ -32,11 +32,11 @@ if not exist ".git" (
     echo [INFO] Inicializando repositorio Git...
     echo.
     git init >nul 2>&1
-    git remote add origin https://github.com/AcademiaSD/AcademiaSD_LoRAlab-Krea2.git >nul 2>&1
+    git remote add origin https://github.com/schorschroch/AcademiaSD_LoRAlab-Krea2.git >nul 2>&1
 )
 
 rem 3. Ensure remote URL
-git remote set-url origin https://github.com/AcademiaSD/AcademiaSD_LoRAlab-Krea2.git >nul 2>&1
+git remote set-url origin https://github.com/schorschroch/AcademiaSD_LoRAlab-Krea2.git >nul 2>&1
 
 echo [EN] Syncing latest updates from GitHub...
 echo [ES] Sincronizando ultimas actualizaciones desde GitHub...
