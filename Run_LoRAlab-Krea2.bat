@@ -7,6 +7,7 @@ cd /d "%~dp0"
 
 set "BASE_DIR=%~dp0"
 set "PYTHON_EXE="
+set "KREA2_GPU_ID=1"
 
 echo.
 echo ================================================================
