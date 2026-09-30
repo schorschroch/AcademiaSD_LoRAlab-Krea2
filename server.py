@@ -13,6 +13,7 @@ import os
 # Physical NVIDIA GPU index as shown by nvidia-smi. Can be overridden before
 # starting the server with KREA2_GPU_ID (for example: set KREA2_GPU_ID=1).
 GPU_ID = os.environ.get("KREA2_GPU_ID", "2").strip() or "2"
+os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
 os.environ["CUDA_VISIBLE_DEVICES"] = GPU_ID
 
 import subprocess
